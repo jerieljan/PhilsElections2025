@@ -76,8 +76,12 @@ with st.sidebar:
     1. **Select an Opinion Polling**: Choose an opinion polling to compare with the actual results.
     2. Switch to the **Summary** tab to view the accuracy of each opinion polling and findings.
     
+    Sources:
+    - Election Results: [abs-cbn.com](https://halalanresults.abs-cbn.com/)
+    - Opinion Polls: [Wikipedia](https://en.m.wikipedia.org/wiki/Opinion_polling_for_the_2025_Philippine_Senate_election)
+    
     """
-    st.info("NOTE: Actual results used sourced from https://halalanresults.abs-cbn.com/. These are partial but mostly definitive results from transmitted election returns. Roughly around ~95% transmitted at the time of capture.")
+    st.info("NOTE: Actual results used are *partial* but mostly definitive results from transmitted election returns. Roughly around ~95% transmitted at the time of capture.")
 
 # Initialize tabs
 individual_polling, summary = st.tabs(["Individual Opinion Polling", "Summary"])
