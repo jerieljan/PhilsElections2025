@@ -72,7 +72,7 @@ def read_actual_results():
     """
     Read and process the actual election results data.
     """
-    with open('data/raw-actual-results.md', 'r') as f:
+    with open('data/raw/raw-actual-results.md', 'r') as f:
         lines = f.readlines()
 
     # Extract header and data rows
@@ -101,7 +101,7 @@ def read_opinion_polls():
     """
     Read and process the opinion poll data.
     """
-    with open('data/raw-opinion-poll-data.md', 'r') as f:
+    with open('data/raw/raw-opinion-poll-data.md', 'r') as f:
         lines = f.readlines()
 
     # Extract header and data rows
