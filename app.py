@@ -64,7 +64,22 @@ def generate_comparison_results():
 
 comparison_df = generate_comparison_results()
 
-# Create sidebar for navigation
+# Sidebar setup
+with st.sidebar:
+    """
+    # Comparison of Opinion Polls vs Actual PH 2025 Election Results
+    
+    This project analyzes the **2025 Philippines election results** and compares them with **opinion polls
+    conducted before the election.** The analysis focuses on how accurately different polling stations
+    predicted the actual top 12 senators.
+    
+    1. **Select an Opinion Polling**: Choose an opinion polling to compare with the actual results.
+    2. Switch to the **Summary** tab to view the accuracy of each opinion polling and findings.
+    
+    """
+    st.info("NOTE: Actual results used sourced from https://halalanresults.abs-cbn.com/. These are partial but mostly definitive results from transmitted election returns. Roughly around ~95% transmitted at the time of capture.")
+
+# Initialize tabs
 individual_polling, summary = st.tabs(["Individual Opinion Polling", "Summary"])
 
 # Opinion Polling Analysis Page
@@ -113,6 +128,7 @@ with individual_polling:
     
     # Display poll percentages for all candidates
     st.subheader("Poll Percentages for All Candidates")
+    st.info(f"Displaying predicted rankings and their poll percentages by **{selected_poll}**. Green entries are in the actual top 12, red entries are not.")
     
     # Create a dataframe with just the candidate names and their poll results
     poll_percentages = opinion_polls[['Standardized Name', selected_poll]].copy()
