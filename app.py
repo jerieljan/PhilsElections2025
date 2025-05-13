@@ -65,11 +65,10 @@ def generate_comparison_results():
 comparison_df = generate_comparison_results()
 
 # Create sidebar for navigation
-st.sidebar.title("Navigation")
-page = st.sidebar.radio("Go to", ["Polling Station Analysis", "Summary of Accuracy"])
+individual_polling, summary = st.tabs(["Individual Polling Station", "Summary"])
 
 # Polling Station Analysis Page
-if page == "Polling Station Analysis":
+with individual_polling:
     st.title("Polling Station Predictions vs Actual Results")
     
     # Get list of polling stations
@@ -146,7 +145,7 @@ if page == "Polling Station Analysis":
     st.pyplot(fig)
 
 # Summary of Accuracy Page
-elif page == "Summary of Accuracy":
+with summary:
     st.title("Summary of Polling Station Accuracy")
     
     # Sort by accuracy
