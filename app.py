@@ -24,7 +24,7 @@ actual_results, opinion_polls, name_mapping = load_data()
 # Get the actual top 12 senators
 actual_top12 = actual_results.head(12)['Standardized Name'].tolist()
 
-# Function to get the top 12 candidates from a polling station
+# Function to get the top 12 candidates from a opinion polling
 def get_top12_from_poll(poll_column):
     # Create a dataframe with just the candidate names and their poll results
     poll_df = opinion_polls[['Standardized Name', poll_column]].copy()
@@ -40,7 +40,7 @@ def generate_comparison_results():
     poll_columns = [col for col in opinion_polls.columns if col not in ['Candidate', 'Party', 'Standardized Name']]
     comparison_results = []
 
-    # For each polling station
+    # For each opinion polling
     for poll_column in poll_columns:
         # Get the top 12 candidates from this poll
         poll_top12 = get_top12_from_poll(poll_column)
@@ -53,7 +53,7 @@ def generate_comparison_results():
 
         # Add to results
         comparison_results.append({
-            'Polling Station': poll_column,
+            'Opinion Polling': poll_column,
             'Correct Predictions': correct_count,
             'Accuracy (%)': accuracy,
             'Predicted Top 12': poll_top12
@@ -65,23 +65,23 @@ def generate_comparison_results():
 comparison_df = generate_comparison_results()
 
 # Create sidebar for navigation
-individual_polling, summary = st.tabs(["Individual Polling Station", "Summary"])
+individual_polling, summary = st.tabs(["Individual Opinion Polling", "Summary"])
 
-# Polling Station Analysis Page
+# Opinion Polling Analysis Page
 with individual_polling:
-    st.title("Polling Station Predictions vs Actual Results")
+    st.title("Opinion Polling Predictions vs Actual Results")
     
-    # Get list of polling stations
+    # Get list of opinion pollings
     poll_columns = [col for col in opinion_polls.columns if col not in ['Candidate', 'Party', 'Standardized Name']]
     
-    # Create dropdown for selecting polling station
-    selected_poll = st.selectbox("Select Polling Station", poll_columns)
+    # Create dropdown for selecting opinion polling
+    selected_poll = st.selectbox("Select Opinion Polling", poll_columns)
     
-    # Get the selected polling station's data
-    poll_data = comparison_df[comparison_df['Polling Station'] == selected_poll].iloc[0]
+    # Get the selected opinion polling's data
+    poll_data = comparison_df[comparison_df['Opinion Polling'] == selected_poll].iloc[0]
     
     # Display accuracy information
-    st.subheader(f"Polling Station: {selected_poll}")
+    st.subheader(f"Opinion Polling: {selected_poll}")
     st.write(f"Correct Predictions: {poll_data['Correct Predictions']} out of 12 ({poll_data['Accuracy (%)']}%)")
     
     # Create columns for side-by-side comparison
@@ -146,43 +146,43 @@ with individual_polling:
 
 # Summary of Accuracy Page
 with summary:
-    st.title("Summary of Polling Station Accuracy")
+    st.title("Summary of Opinion Polling Accuracy")
     
     # Sort by accuracy
     sorted_comparison = comparison_df.sort_values('Accuracy (%)', ascending=False)
     
     # Display the comparison results
-    st.subheader("Polling Stations Ranked by Accuracy")
-    st.dataframe(sorted_comparison[['Polling Station', 'Correct Predictions', 'Accuracy (%)']])
+    st.subheader("Opinion Polling Ranked by Accuracy")
+    st.dataframe(sorted_comparison[['Opinion Polling', 'Correct Predictions', 'Accuracy (%)']])
     
-    # Visualize the accuracy of each polling station
-    st.subheader("Polling Station Accuracy Visualization")
+    # Visualize the accuracy of each opinion polling
+    st.subheader("Opinion Polling Accuracy Visualization")
     
     fig, ax = plt.subplots(figsize=(12, 8))
-    sns.barplot(x='Polling Station', y='Accuracy (%)', data=sorted_comparison, ax=ax)
+    sns.barplot(x='Opinion Polling', y='Accuracy (%)', data=sorted_comparison, ax=ax)
     plt.xticks(rotation=90)
-    plt.title('Polling Station Accuracy in Predicting Top 12 Senators')
+    plt.title('Opinion Polling Accuracy in Predicting Top 12 Senators')
     plt.tight_layout()
     
     st.pyplot(fig)
     
-    # Most accurate polling stations
-    st.subheader("Most Accurate Polling Stations")
+    # Most accurate opinion polling
+    st.subheader("Most Accurate Opinion Pollings")
     for i, (_, row) in enumerate(sorted_comparison.head(3).iterrows(), 1):
-        st.write(f"{i}. {row['Polling Station']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
+        st.write(f"{i}. {row['Opinion Polling']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
     
-    # Least accurate polling stations
-    st.subheader("Least Accurate Polling Stations")
+    # Least accurate opinion polling
+    st.subheader("Least Accurate Opinion Pollings")
     for i, (_, row) in enumerate(sorted_comparison.tail(3).iterrows(), 1):
-        st.write(f"{i}. {row['Polling Station']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
+        st.write(f"{i}. {row['Opinion Polling']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
     
     # Overall average accuracy
     avg_accuracy = comparison_df['Accuracy (%)'].mean()
     st.subheader("Overall Average Accuracy")
-    st.write(f"Average Accuracy Across All Polling Stations: {avg_accuracy:.2f}%")
+    st.write(f"Average Accuracy Across All Opinion Polling: {avg_accuracy:.2f}%")
     
     # Most commonly missed candidates
-    st.subheader("Candidates in the Actual Top 12 Most Commonly Missed by Polling Stations")
+    st.subheader("Candidates in the Actual Top 12 Most Commonly Missed by Opinion Pollings")
     
     missed_counts = {}
     for senator in actual_top12:
@@ -193,10 +193,10 @@ with summary:
     for senator, count in sorted(missed_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
         if count > 0:
             miss_percentage = (count / len(comparison_df)) * 100
-            st.write(f"- {senator}: Missed by {count} polling stations ({miss_percentage:.1f}%)")
+            st.write(f"- {senator}: Missed by {count} opinion pollings ({miss_percentage:.1f}%)")
     
     # Most commonly incorrectly included candidates
-    st.subheader("Candidates Not in the Actual Top 12 Most Commonly Included by Polling Stations")
+    st.subheader("Candidates Not in the Actual Top 12 Most Commonly Included by Opinion Pollings")
     
     incorrect_counts = {}
     for _, row in comparison_df.iterrows():
@@ -208,4 +208,4 @@ with summary:
     for candidate, count in sorted(incorrect_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
         if count > 0:
             include_percentage = (count / len(comparison_df)) * 100
-            st.write(f"- {candidate}: Incorrectly included by {count} polling stations ({include_percentage:.1f}%)")
+            st.write(f"- {candidate}: Incorrectly included by {count} opinion pollings ({include_percentage:.1f}%)")
