@@ -1,0 +1,27 @@
+| Rank | Candidate Name | Political Party | Number of Votes |
+|---|---|---|---|
+| 1st | GO, BONG GO | (PDPLBN) | 26,479,597 |
+| 2nd | AQUINO, BAM | (KNP) | 20,634,871 |
+| 3rd | DELA ROSA, BATO | (PDPLBN) | 20,263,395 |
+| 4th | TULFO, ERWIN | (LAKAS) | 16,813,744 |
+| 5th | PANGILINAN, KIKO | (LP) | 15,087,278 |
+| 6th | MARCOLETA, RODANTE | (IND) | 14,904,190 |
+| 7th | LACSON, PING | (IND) | 14,855,623 |
+| 8th | SOTTO, TITO | (NPC) | 14,595,834 |
+| 9th | CAYETANO, PIA | (NP) | 14,305,761 |
+| 10th | VILLAR, CAMILLE | (NP) | 13,356,877 |
+| 11th | LAPID, LITO | (NPC) | 13,117,515 |
+| 12th | MARCOS, IMEE R. | (NP) | 13,035,203 |
+| 13th | TULFO, BEN BITAG | (IND) | 11,885,694 |
+| 14th | BONG REVILLA, RAMON, JR. | (LAKAS) | 11,787,605 |
+| 15th | BINAY, ABBY | (NPC) | 11,568,708 |
+| 16th | ABALOS, BENHUR | (PFP) | 11,352,731 |
+| 17th | BONDOC, JIMMY | (PDPLBN) | 10,351,364 |
+| 18th | PACQUIAO, MANNY PACMAN | (PFP) | 10,207,354 |
+| 19th | SALVADOR, PHILLIP IPE | (PDPLBN) | 9,977,854 |
+| 20th | BOSITA, COLONEL | (IND) | 9,676,522 |
+| 21st | MENDOZA, HEIDI | (IND) | 8,650,575 |
+| 22nd | REVILLAME, WILLIE WIL | (IND) | 8,412,930 |
+| 23rd | RODRIGUEZ, ATTY. VIC | (IND) | 8,240,249 |
+| 24th | LAMBINO, RAUL | (PDPLBN) | 8,164,133 |
+| 25th | TOLENTINO, FRANCIS TOL | (PFP) | 7,563,543 |
