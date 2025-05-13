@@ -6,7 +6,7 @@ import numpy as np
 
 # Set page configuration
 st.set_page_config(
-    page_title="Philippines Elections 2025 Analysis",
+    page_title="Comparing Opinion Polls vs PH 2025 Election Results",
     page_icon="🗳️",
     layout="wide"
 )
@@ -76,12 +76,23 @@ with st.sidebar:
     1. **Select an Opinion Polling**: Choose an opinion polling to compare with the actual results.
     2. Switch to the **Summary** tab to view the accuracy of each opinion polling and findings.
     
-    Sources:
+    ## Disclaimer
+    
+    This is an **unofficial quick analysis project** and is purely exploratory in nature.
+    
+    The findings are not part of any formal study and **should not be considered as official election analysis**.
+    
+    ## Sources:
+    
     - Election Results: [abs-cbn.com](https://halalanresults.abs-cbn.com/)
     - Opinion Polls: [Wikipedia](https://en.m.wikipedia.org/wiki/Opinion_polling_for_the_2025_Philippine_Senate_election)
     
+    ## Notes:
+    
+    - This only covers the recent opinion polls. Polls before April 2025 are not included.
+    - This uses *partial* results from a third-party, but should be mostly accurate. Data was used when it was around ~95% transmitted.
+    
     """
-    st.info("NOTE: Actual results used are *partial* but mostly definitive results from transmitted election returns. Roughly around ~95% transmitted at the time of capture.")
 
 # Initialize tabs
 individual_polling, summary = st.tabs(["Individual Opinion Polling", "Summary"])
@@ -90,18 +101,18 @@ individual_polling, summary = st.tabs(["Individual Opinion Polling", "Summary"])
 with individual_polling:
     st.title("Opinion Polling Predictions vs Actual Results")
     
-    # Get list of opinion pollings
+    # Get list of opinion polls
     poll_columns = [col for col in opinion_polls.columns if col not in ['Candidate', 'Party', 'Standardized Name']]
     
     # Create dropdown for selecting opinion polling
-    selected_poll = st.selectbox("Select Opinion Polling", poll_columns)
+    selected_poll = st.selectbox("Select Opinion Poll", poll_columns)
     
-    # Get the selected opinion polling's data
+    # Get the selected opinion poll's data
     poll_data = comparison_df[comparison_df['Opinion Polling'] == selected_poll].iloc[0]
     
     # Display accuracy information
-    st.subheader(f"Opinion Polling: {selected_poll}")
-    st.write(f"Correct Predictions: {poll_data['Correct Predictions']} out of 12 ({poll_data['Accuracy (%)']}%)")
+    st.header(f"Opinion Poll: {selected_poll}")
+    st.info(f"Correct Predictions: {poll_data['Correct Predictions']} out of 12 ({poll_data['Accuracy (%)']}%)")
     
     # Create columns for side-by-side comparison
     col1, col2 = st.columns(2)
@@ -132,7 +143,7 @@ with individual_polling:
     
     # Display poll percentages for all candidates
     st.subheader("Poll Percentages for All Candidates")
-    st.info(f"Displaying predicted rankings and their poll percentages by **{selected_poll}**. Green entries are in the actual top 12, red entries are not.")
+    st.info(f"Displaying predicted rankings and their poll percentages by **{selected_poll}**. Blue entries are correct predictions that actually made the top 12, red entries are incorrect predictions. Amber entries are winning candidates that weren't predicted correctly.")
     
     # Create a dataframe with just the candidate names and their poll results
     poll_percentages = opinion_polls[['Standardized Name', selected_poll]].copy()
@@ -149,14 +160,17 @@ with individual_polling:
     
     # Create the bar chart
     bars = sns.barplot(x=selected_poll, y='Standardized Name', data=top_candidates, ax=ax)
-    
+
     # Color the bars based on whether the candidate is in the actual top 12
     for i, bar in enumerate(bars.patches):
         candidate = top_candidates.iloc[i]['Standardized Name']
         if candidate in actual_top12:
-            bar.set_color('green')
+            if i < 12:  # Color with lighter blue for correct candidates before 12th row
+                bar.set_color("#3b82f6")
+            else:  # Use amber for correct candidates after 12th row
+                bar.set_color("#f59e0b")
         else:
-            bar.set_color('red')
+            bar.set_color("#ef4444")
     
     plt.title(f'Top 20 Candidates in {selected_poll}')
     plt.xlabel('Poll Percentage')
@@ -174,25 +188,14 @@ with summary:
     # Display the comparison results
     st.subheader("Opinion Polling Ranked by Accuracy")
     st.dataframe(sorted_comparison[['Opinion Polling', 'Correct Predictions', 'Accuracy (%)']])
-    
-    # Visualize the accuracy of each opinion polling
-    st.subheader("Opinion Polling Accuracy Visualization")
-    
-    fig, ax = plt.subplots(figsize=(12, 8))
-    sns.barplot(x='Opinion Polling', y='Accuracy (%)', data=sorted_comparison, ax=ax)
-    plt.xticks(rotation=90)
-    plt.title('Opinion Polling Accuracy in Predicting Top 12 Senators')
-    plt.tight_layout()
-    
-    st.pyplot(fig)
-    
+
     # Most accurate opinion polling
-    st.subheader("Most Accurate Opinion Pollings")
+    st.subheader("Most Accurate Opinion Polls")
     for i, (_, row) in enumerate(sorted_comparison.head(3).iterrows(), 1):
         st.write(f"{i}. {row['Opinion Polling']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
     
     # Least accurate opinion polling
-    st.subheader("Least Accurate Opinion Pollings")
+    st.subheader("Least Accurate Opinion Polls")
     for i, (_, row) in enumerate(sorted_comparison.tail(3).iterrows(), 1):
         st.write(f"{i}. {row['Opinion Polling']}: {row['Correct Predictions']} correct ({row['Accuracy (%)']}%)")
     
@@ -202,8 +205,8 @@ with summary:
     st.write(f"Average Accuracy Across All Opinion Polling: {avg_accuracy:.2f}%")
     
     # Most commonly missed candidates
-    st.subheader("Candidates in the Actual Top 12 Most Commonly Missed by Opinion Pollings")
-    
+    st.subheader("Candidates in the Actual Top 12 Most Commonly Missed by Opinion Polls")
+    st.caption("These candidates were found in common across opinion polls.")
     missed_counts = {}
     for senator in actual_top12:
         missed_count = sum(1 for _, row in comparison_df.iterrows() if senator not in row['Predicted Top 12'])
@@ -213,10 +216,11 @@ with summary:
     for senator, count in sorted(missed_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
         if count > 0:
             miss_percentage = (count / len(comparison_df)) * 100
-            st.write(f"- {senator}: Missed by {count} opinion pollings ({miss_percentage:.1f}%)")
+            st.write(f"- {senator}: Missed by {count} opinion polls ({miss_percentage:.1f}%)")
     
     # Most commonly incorrectly included candidates
-    st.subheader("Candidates Not in the Actual Top 12 Most Commonly Included by Opinion Pollings")
+    st.subheader("Candidates Not in the Actual Top 12 Most Commonly Included by Opinion Polls")
+    st.caption("These candidates were missed out by multiple opinion polls.")
     
     incorrect_counts = {}
     for _, row in comparison_df.iterrows():
@@ -228,4 +232,17 @@ with summary:
     for candidate, count in sorted(incorrect_counts.items(), key=lambda x: x[1], reverse=True)[:5]:
         if count > 0:
             include_percentage = (count / len(comparison_df)) * 100
-            st.write(f"- {candidate}: Incorrectly included by {count} opinion pollings ({include_percentage:.1f}%)")
+            st.write(f"- {candidate}: Incorrectly included by {count} opinion polls ({include_percentage:.1f}%)")
+
+    # Visualize the accuracy of each opinion polling
+    st.subheader("Opinion Polling Accuracy Visualization")
+
+    fig, ax = plt.subplots(figsize=(10, 5))
+    sns.barplot(y='Opinion Polling', x='Accuracy (%)', data=sorted_comparison, ax=ax)
+    plt.xticks(rotation=90)
+    plt.title('Opinion Polling Accuracy in Predicting Top 12 Senators')
+    plt.tight_layout()
+
+    st.pyplot(fig)
+
+st.caption("Disclaimer: This is an **unofficial quick analysis project** and is purely exploratory in nature. The findings are not part of any formal study and **should not be considered as official election analysis**.")
