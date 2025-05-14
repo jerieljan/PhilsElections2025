@@ -1,6 +1,8 @@
-# Philippines Elections 2025 Analysis
+# Comparing Opinion Polls vs PH 2025 Election Results
 
 This project analyzes the 2025 Philippines election results and compares them with opinion polls conducted before the election. The analysis focuses on how accurately different polling stations predicted the actual top 12 senators.
+
+Disclaimer: This is an **unofficial quick analysis project** and is purely exploratory in nature. The findings are not part of any formal study and **should not be considered as official election analysis**.
 
 ## Features
 
@@ -24,6 +26,19 @@ The app uses processed data from:
 - `data/processed/actual_results.csv`: The actual election results
 - `data/processed/opinion_polls.csv`: Opinion poll data from various polling stations
 - `data/processed/name_mapping.csv`: Mapping of candidate names for standardization
+
+These are sourced from the following:
+
+## Sources:
+
+- Election Results: [abs-cbn.com](https://halalanresults.abs-cbn.com/)
+- Opinion Polls: [Wikipedia](https://en.m.wikipedia.org/wiki/Opinion_polling_for_the_2025_Philippine_Senate_election)
+
+## Notes:
+
+- This only covers the recent opinion polls. Polls before April 2025 are not included.
+- This uses *partial* results from a third-party, but should be mostly accurate. Data was used when it was around ~95% transmitted.
+
 
 ## How to Run
 
